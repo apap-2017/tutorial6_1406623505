@@ -1,0 +1,22 @@
+1. Tidak bisa. Tergantung kebutuhan
+
+2. Karena kalo pakai get perlu diletakkan di url, tetapi untuk post cukup json
+Tidak ada yang berbeda
+
+3. Tidak bisa.
+
+
+Delete: 
+methodnya default. 
+querynya adalah: @Delete("DELETE FROM student where npm = #{npm}")
+dipanggil dari method delete student
+halamannya dari viewall
+
+Update: 
+Method post
+querynya adalah @Update("UPDATE student SET name = #{name}, gpa =#{gpa} WHERE npm = #{npm}")
+
+Object: 
+Method post
+querynya adalah @Update("UPDATE student SET name = #{name}, gpa =#{gpa} WHERE npm = #{npm}")
+input dijadikan objek.

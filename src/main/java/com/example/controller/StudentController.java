@@ -128,8 +128,8 @@ public class StudentController
         System.out.println(npm);
     	System.out.println(name);
     	System.out.println(gpa);
-
-        studentDAO.updateStudent(a);
+    	StudentModel x = new StudentModel(npm, name, gpa);
+        studentDAO.updateStudent(x);
         
         return "success-update";
     }
