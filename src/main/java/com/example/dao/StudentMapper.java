@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.example.model.StudentModel;
 
@@ -24,4 +25,7 @@ public interface StudentMapper
 
     @Delete("DELETE FROM student where npm = #{npm}")
     void deleteStudent(String npm);
+    
+    @Update("UPDATE student SET name = #{name}, gpa =#{gpa} WHERE npm = #{npm}")
+    void updateStudent(StudentModel student);
 }
