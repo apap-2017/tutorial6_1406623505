@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.model.CourseModel;
 import com.example.model.StudentModel;
 import com.example.service.StudentService;
 
@@ -40,7 +41,7 @@ public class StudentController
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "gpa", required = false) double gpa)
     {
-        StudentModel student = new StudentModel (npm, name, gpa);
+        StudentModel student = new StudentModel (npm, name, gpa, null);
         studentDAO.addStudent (student);
 
         return "success-add";
@@ -68,7 +69,7 @@ public class StudentController
             @PathVariable(value = "npm") String npm)
     {
         StudentModel student = studentDAO.selectStudent (npm);
-
+        
         if (student != null) {
             model.addAttribute ("student", student);
             return "view";
@@ -78,7 +79,15 @@ public class StudentController
         }
     }
 
+    @RequestMapping("/student/course/view/{id}")
+    public String viewCourse(Model model, @PathVariable(value = "id") String id)
+    {
+        CourseModel course = studentDAO.selectAllStudentsCourse (id);
+        model.addAttribute ("course", course);
 
+        return "course";
+    }
+    
     @RequestMapping("/student/viewall")
     public String view (Model model)
     {
@@ -128,7 +137,7 @@ public class StudentController
         System.out.println(npm);
     	System.out.println(name);
     	System.out.println(gpa);
-    	StudentModel x = new StudentModel(npm, name, gpa);
+    	StudentModel x = new StudentModel(npm, name, gpa, null);
         studentDAO.updateStudent(x);
         
         return "success-update";

@@ -1,22 +1,58 @@
-1. Tidak bisa. Tergantung kebutuhan
+1.
+Menambahkan ini saja:
+@Results(value = {
+	@Result(property="npm", column="npm"),
+	@Result(property="name", column="name"),
+	@Result(property="gpa", column="gpa"),
+	@Result(property="courses", column="npm",
+	javaType = List.class,
+	many=@Many(select="selectCourses"))
+	})
 
-2. Karena kalo pakai get perlu diletakkan di url, tetapi untuk post cukup json
-Tidak ada yang berbeda
+Karena hal yang dibutuhkan sama, hanya berbeda ketentuan "where" saja karena SelectAll
 
-3. Tidak bisa.
+2.
+Pada Mapper::
+
+@Select("select id_course, name, credits from course where id_course = #{idCourse}")
+    @Results(value = {
+    		@Result(property="idCourse", column="id_course"),
+    		@Result(property="name", column="name"),
+    		@Result(property="credits", column="credits"),
+    		@Result(property="students", column="id_course",
+    		javaType = List.class,
+    		many=@Many(select="selectStudentByCourseHelper"))
+    		})
+    CourseModel selectAllStudentsByCourse(@Param("idCourse") String idCourse);
+
+ @Select("select student.npm, name, gpa " +
+    		"from studentcourse join student " +
+    		"on studentcourse.npm = student.npm " +
+    		"where studentcourse.id_course = #{idCourse}")
+    		List<StudentModel> selectStudentByCourseHelper (@Param("idCourse") String idCourse);
 
 
-Delete: 
-methodnya default. 
-querynya adalah: @Delete("DELETE FROM student where npm = #{npm}")
-dipanggil dari method delete student
-halamannya dari viewall
+Pada Controller::
+    
+@RequestMapping("/student/course/view/{id}")
+    public String viewCourse(Model model, @PathVariable(value = "id") String id)
+    {
+        CourseModel course = studentDAO.selectAllStudentsCourse (id);
+        model.addAttribute ("course", course);
 
-Update: 
-Method post
-querynya adalah @Update("UPDATE student SET name = #{name}, gpa =#{gpa} WHERE npm = #{npm}")
+        return "course";
+    }
 
-Object: 
-Method post
-querynya adalah @Update("UPDATE student SET name = #{name}, gpa =#{gpa} WHERE npm = #{npm}")
-input dijadikan objek.
+
+Pada Service ::
+
+@Override
+    public CourseModel selectAllStudentsCourse (String idCourse)
+    {
+        log.info ("select all students by Course");
+        return studentMapper.selectAllStudentsByCourse (idCourse);
+    }
+------------------------------------------------------------------
+------------------------------------------------------------------
+Helper dibutuhkan untuk memanggil query Join. Query pertama digunakan untuk mengambil course, cara kerja mirip seperti pada tutorial,
+tetapi dibalik. Seperti List Student menjadi List Course, atau list course menjadi course.

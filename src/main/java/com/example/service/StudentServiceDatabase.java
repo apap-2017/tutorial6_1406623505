@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dao.StudentMapper;
+import com.example.model.CourseModel;
 import com.example.model.StudentModel;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ public class StudentServiceDatabase implements StudentService
     public StudentModel selectStudent (String npm)
     {
         log.info ("select student with npm {}", npm);
+        StudentModel asd = studentMapper.selectStudent(npm);
+        System.out.println(asd.getCourses());
         return studentMapper.selectStudent (npm);
     }
 
@@ -33,6 +36,12 @@ public class StudentServiceDatabase implements StudentService
         return studentMapper.selectAllStudents ();
     }
 
+    @Override
+    public CourseModel selectAllStudentsCourse (String idCourse)
+    {
+        log.info ("select all students by Course");
+        return studentMapper.selectAllStudentsByCourse (idCourse);
+    }
 
     @Override
     public void addStudent (StudentModel student)
