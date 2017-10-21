@@ -18,6 +18,6 @@ Menggunakan:
 - css dan js
 - fragment
 - th:unless
-- th:case
+- th: switch & case
 - iterationstatus
 - membuat error page. 
